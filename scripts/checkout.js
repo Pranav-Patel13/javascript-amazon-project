@@ -1,9 +1,10 @@
-import {cart,removeFromCart} from '../data/cart.js';
+import {cart,removeFromCart,updateCheckOut,updateCartQuantity} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 
 let cartSummaryHTML = '';
 
+updateCheckOut();
 cart.forEach((cartItem)=>{
   const productId = cartItem.productId;
 
@@ -35,14 +36,17 @@ cart.forEach((cartItem)=>{
           </div>
           <div class="product-quantity">
             <span>
-              Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+              Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">${cartItem.quantity}</span>
             </span>
-            <span class="update-quantity-link link-primary">
+            <span class="update-quantity-link link-primary js-update-link js-update-link-${matchingProduct.id}" data-product-id="${matchingProduct.id}">
               Update
             </span>
+            <input class="quantity-input js-quantity-input-${matchingProduct.id}">
+            <span class="save-quantity-link link-primary js-save-link-${matchingProduct.id} js-save-link" data-product-id="${matchingProduct.id}">Save</span>
             <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
               Delete
             </span>
+            <p class="warning js-warning-${matchingProduct.id}">please add valid positive number.</p>
           </div>
         </div>
 
@@ -107,5 +111,62 @@ document.querySelectorAll('.js-delete-link')
 
       const container = document.querySelector(`.js-cart-item-container-${productId}`);
       container.remove();
+    });
+  });
+
+document.querySelectorAll('.js-update-link')
+  .forEach((updateLink)=>{
+    updateLink.addEventListener('click',()=>{
+      const productId = updateLink.dataset.productId;
+      // console.log(productId);
+      const inputElement = document.querySelector(`.js-quantity-input-${productId}`);
+      const saveElement = document.querySelector(`.js-save-link-${productId}`);
+      inputElement.classList.add('is-editing-quantity');
+      saveElement.classList.add('is-editing-quantity');
+      updateLink.classList.add('hide-update-link');
+    });
+  });
+
+document.querySelectorAll('.js-save-link')
+  .forEach((saveLink)=>{
+    saveLink.addEventListener('click',()=>{
+      const {productId} = saveLink.dataset;
+      const inputElement = document.querySelector(`.js-quantity-input-${productId}`);
+      const updateElement = document.querySelector(`.js-update-link-${productId}`);
+      
+      const updatedQuantity = inputElement.value;
+
+      // inputElement.addEventListener('keydown', (event) => {
+      //   console.log(event.key);
+      //   if(event.key === 'Enter'){
+          // if(updatedQuantity >= 0 && updatedQuantity < 1000){
+          //   updateCartQuantity(productId,Number(updatedQuantity));
+          //   document.querySelector(`.js-warning-${productId}`).classList.remove('show-warning');
+          // }else{
+          //   document.querySelector(`.js-warning-${productId}`).classList.add('show-warning');
+          // }
+
+          // const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`);
+          // quantityLabel.innerHTML = Number(updatedQuantity);
+
+          // inputElement.classList.remove('is-editing-quantity');
+          // saveLink.classList.remove('is-editing-quantity');
+          // updateElement.classList.remove('hide-update-link');
+      //   }
+      // });
+
+      if(updatedQuantity >= 0 && updatedQuantity < 1000){
+        updateCartQuantity(productId,Number(updatedQuantity));
+        document.querySelector(`.js-warning-${productId}`).classList.remove('show-warning');
+      }else{
+        document.querySelector(`.js-warning-${productId}`).classList.add('show-warning');
+      }
+
+      const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`);
+      quantityLabel.innerHTML = Number(updatedQuantity);
+
+      inputElement.classList.remove('is-editing-quantity');
+      saveLink.classList.remove('is-editing-quantity');
+      updateElement.classList.remove('hide-update-link');
     });
   });

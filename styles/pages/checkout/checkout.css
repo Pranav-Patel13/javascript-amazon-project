@@ -209,3 +209,30 @@
   margin-top: 11px;
   margin-bottom: 15px;
 }
+
+.quantity-input{
+  width: 30px;
+}
+
+.save-quantity-link,.quantity-input{
+  display: none;
+}
+
+.is-editing-quantity{
+  display: initial;
+}
+
+.hide-update-link{
+  display: none;
+}
+
+.warning{
+  color: red;
+  font-size: 12px;
+  margin-top: 10px;
+  display: none;
+}
+
+.show-warning{
+  display: block;
+}
