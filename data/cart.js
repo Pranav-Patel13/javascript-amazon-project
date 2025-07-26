@@ -61,7 +61,7 @@ export function removeFromCart(productId){
 // updateCheckOut();
 export function updateCheckOut(){
   let cartQuantity = calculateCartItem();
-  document.querySelector('.js-checkout-quantity').innerHTML = `${cartQuantity}items`; 
+  document.querySelector('.js-checkout-quantity').innerHTML = `${cartQuantity}items`;
 }
 
 export function calculateCartItem(){
