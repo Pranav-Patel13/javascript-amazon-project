@@ -1,14 +1,4 @@
-export function getProduct(productId){
-  let matchingProduct;
 
-  products.forEach((product)=>{
-    if(product.id === productId){
-      matchingProduct = product;
-    }
-  });
-
-  return matchingProduct;
-}
 
 
 export let products = [];
@@ -41,6 +31,17 @@ export function loadProducts(fun){
   xhr.send();
 }
 
+export function getProduct(productId){
+  let matchingProduct;
+
+  products.forEach((product)=>{
+    if(product.id === productId){
+      matchingProduct = product;
+    }
+  });
+
+  return matchingProduct;
+}
 // loadProducts();
 
 /*
