@@ -19,6 +19,9 @@ export function loadProductsFetch(){
   }).then((productsData) => {
     // console.log(productsData);
     products = productsData;
+  }).catch((error)=>{
+    console.log('enexpected error occured!!!');
+    
   });
 
   return promise;

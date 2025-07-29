@@ -24,14 +24,19 @@ import { loadCart } from "../data/cart.js";
 // });
 
 async function loadPage(){
-  console.log('load page');
-
-  await loadProductsFetch();
-  await new Promise((resolve)=>{
-    loadCart(()=>{
-      resolve();
+  try{
+    // throw 'error1';
+    console.log('load page');
+    
+    await loadProductsFetch();
+    await new Promise((resolve)=>{
+      loadCart(()=>{
+        resolve();
+      });
     });
-  });
+  }catch(error){
+    console.log('unexpected error occured!!!');
+  }
   
   renderOrderSummary();
   renderPaymentSummary();
