@@ -23,6 +23,21 @@ import { loadCart } from "../data/cart.js";
 //   renderPaymentSummary();  
 // });
 
+async function loadPage(){
+  console.log('load page');
+
+  await loadProductsFetch();
+  await new Promise((resolve)=>{
+    loadCart(()=>{
+      resolve();
+    });
+  });
+  
+  renderOrderSummary();
+  renderPaymentSummary();
+}
+loadPage();
+/*
 Promise.all([
   loadProductsFetch(),
   new Promise((resolve)=>{
@@ -36,6 +51,7 @@ Promise.all([
   renderOrderSummary();
   renderPaymentSummary();  
 });
+*/
 
 /*
 new Promise((resolve)=>{
