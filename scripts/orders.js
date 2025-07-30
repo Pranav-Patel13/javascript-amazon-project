@@ -1,6 +1,7 @@
 import {orders} from '../data/orders.js';
 import {products, getProduct, loadProductsFetch} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
+import {calculateCartItem, addToCart} from '../data/cart.js';
 
 async function loadPage(){
   try{
@@ -24,21 +25,22 @@ loadPage();
 
 function renderOrdersPage(){
 
-  function renderOrderProducts(productsInOrder,orderId){  
+  function renderOrderProducts(productsInOrder,orderId){
     let finalOrderProductHTML = '';
     productsInOrder.forEach((productItem)=>{
       // console.log(productItem);
       
       let matchingProduct;
-
-        // console.log(products);
-        
+      
+      // console.log(products);
+      
       products.forEach((product)=>{
         if(product.id === productItem.productId){
           matchingProduct = product;
         }
       });
-
+      
+      const myDate = new Date(productItem.estimatedDeliveryTime);  
       // console.log(matchingProduct);
       
       const orderProductHTML = 
@@ -52,23 +54,23 @@ function renderOrdersPage(){
             ${matchingProduct.name}
           </div>
           <div class="product-delivery-date">
-            Arriving on: ${productItem.estimatedDeliveryTime}
+            Arriving on: ${myDate.toUTCString()}
           </div>
           <div class="product-quantity">
             Quantity: ${productItem.quantity}
           </div>
-          <button class="buy-again-button button-primary">
+          <button class="buy-again-button button-primary js-buy-again" 
+            data-product-id=${matchingProduct.id}>
             <img class="buy-again-icon" src="images/icons/buy-again.png">
             <span class="buy-again-message">Buy it again</span>
           </button>
         </div>
 
         <div class="product-actions">
-          <a href="tracking.html">
-            <button class="track-package-button button-secondary">
+            <button class="track-package-button button-secondary js-track-package"
+              data-order-id=${orderId} data-product-id=${matchingProduct.id}>
               Track package
             </button>
-          </a>
         </div>
       `;
 
@@ -81,6 +83,7 @@ function renderOrdersPage(){
 
   orders.forEach((order)=>{
 
+    const myDate = new Date(order.orderTime);
     const orderHTML = `
       <div class="order-container">
         
@@ -88,7 +91,7 @@ function renderOrdersPage(){
           <div class="order-header-left-section">
             <div class="order-date">
               <div class="order-header-label">Order Placed:</div>
-              <div>${order.orderTime}</div>
+              <div>${myDate.toLocaleString()}</div>
             </div>
             <div class="order-total">
               <div class="order-header-label">Total:</div>
@@ -114,4 +117,30 @@ function renderOrdersPage(){
     renderOrderProducts(order.products,order.id);
     // document.querySelector('.js-order-details-grid').innerHTML = orderProductHTML;
   });
+  
+  document.querySelector('.js-cart-quantity').innerHTML = calculateCartItem();
+  
+  document.querySelectorAll('.js-buy-again')
+    .forEach((buyAgainButton)=>{
+      buyAgainButton.addEventListener('click',()=>{
+        // console.log('clicked');
+        const productId = buyAgainButton.dataset.productId;
+        addToCart(productId);
+        document.querySelector('.js-cart-quantity').innerHTML = calculateCartItem();
+      });
+    });
+
+  document.querySelectorAll('.js-track-package')
+    .forEach((trackButton)=>{
+      trackButton.addEventListener('click',()=>{
+        // console.log(clicked);
+        const baseURL = 'http://127.0.0.1:5500/tracking.html';
+        const params = new URLSearchParams();
+        const {orderId,productId} = trackButton.dataset;
+        params.set('orderId',orderId);
+        params.set('productId', productId);
+        
+        window.location.href = `${baseURL}?${params.toString()}`;
+      })
+    });
 }

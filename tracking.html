@@ -45,14 +45,14 @@
 
         <a class="cart-link header-link" href="checkout.html">
           <img class="cart-icon" src="images/icons/cart-icon.png">
-          <div class="cart-quantity">3</div>
+          <div class="cart-quantity ja-cart-quantity"></div>
           <div class="cart-text">Cart</div>
         </a>
       </div>
     </div>
 
-    <div class="main">
-      <div class="order-tracking">
+    <div class="main js-main">
+      <!-- <div class="order-tracking">
         <a class="back-to-orders-link link-primary" href="orders.html">
           View all orders
         </a>
@@ -86,10 +86,10 @@
         <div class="progress-bar-container">
           <div class="progress-bar"></div>
         </div>
-      </div>
+      </div> -->
     </div>
-    <script>
-      const url = new URL(window.location.href);
+    <script type="module" src="scripts/tracking.js">
+      // const url = new URL(window.location.href);
       // console.log(url.searchParams.get('orderId'));
       
     </script>
