@@ -38,14 +38,25 @@ function renderProductsGrid(){
 
   document.querySelector('.js-search-button')
    .addEventListener('click',()=>{
-     const searchedValue = document.querySelector('.js-search-bar').value;
+      const searchedValue = document.querySelector('.js-search-bar').value;
 
       const baseURL = 'http://127.0.0.1:5500/amazon.html';
       const params = new URLSearchParams();
       params.set('searchedItem',searchedValue);
       
       window.location.href = `${baseURL}?${params.toString()}`;
+    });
+  document.querySelector('.js-search-bar')
+    .addEventListener('keydown',(event)=>{
+      if(event.key === 'Enter'){
+        const searchedValue = document.querySelector('.js-search-bar').value;
 
+        const baseURL = 'http://127.0.0.1:5500/amazon.html';
+        const params = new URLSearchParams();
+        params.set('searchedItem',searchedValue);
+        
+        window.location.href = `${baseURL}?${params.toString()}`;
+      }
     });
     // const url = new URL(window.location.href);
     // const searchedProduct = url.searchParams.get('searchedItem');
