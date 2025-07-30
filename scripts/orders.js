@@ -125,7 +125,7 @@ function renderOrdersPage(){
       buyAgainButton.addEventListener('click',()=>{
         // console.log('clicked');
         const productId = buyAgainButton.dataset.productId;
-        addToCart(productId);
+        addToCart(productId,1);
         document.querySelector('.js-cart-quantity').innerHTML = calculateCartItem();
       });
     });

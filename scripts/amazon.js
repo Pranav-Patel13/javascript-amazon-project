@@ -29,7 +29,9 @@ function renderProductsGrid(){
         // console.log(button.dataset.productName);
         const productId = button.dataset.productId;
 
-        addToCart(productId);
+        const quantity = document.querySelector(`.js-quantity-container-${productId}`).value;        
+
+        addToCart(productId,Number(quantity));
         updateCartQuantity();
       });
     });
@@ -77,7 +79,7 @@ function showProduct(product){
         </div>
 
         <div class="product-quantity-container">
-          <select>
+          <select class='js-quantity-container-${product.id}'>
             <option selected value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -93,7 +95,7 @@ function showProduct(product){
 
         <div class="product-spacer"></div>
 
-        <div class="added-to-cart">
+        <div class="added-to-cart js-added-to-cart-${product.id}">
           <img src="images/icons/checkmark.png">
           Added
         </div>
