@@ -1,6 +1,3 @@
-
-
-
 export let products = [];
 
 export function loadProductsFetch(){
